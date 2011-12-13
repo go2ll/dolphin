@@ -1,0 +1,109 @@
+#{extends 'CRUD/layout.html' /}
+
+<div id="crudList">
+    <div id="crudListSearch">
+        <input type="text" name="defname"/>&nbsp;<input type="button" name="search" value="Search"/>
+    </div>
+
+    <div id="crudListTable">        
+        #{if defs}
+		<table id="processDefs" >
+			<thead>
+				<tr>
+					<th width="50">ID</th>
+					<th width="220">Process ID</th>		
+					<th width="100">Version</th>
+					<th width="150">Create Date</th>
+					<th>Operation</th>             
+				</tr>
+			</thead>
+			<tbody id="listDefs">
+				#{list defs, as:'def'}
+				%{ numOfInstances = def.getProcessInstances().size(); }%
+				<tr id="${def.id}" class="${def_parity}">
+					<td>${def.id}</td>
+					<td>${def.processId}</td>
+					<td>${def.version}</td>
+					<td>${def.createDate}</td>
+					<td><input type="button" value="Create" name="createInst" title="Create Process Instance"/>&nbsp;
+						<input type="button" value="Delete" name="delete" title="Delete Process Definition"/>&nbsp;
+						<input type="button" value="XML" name="showcontent" title="Show Defintion Content XML" class="showcontent cboxElement"/>&nbsp;
+						<input type="button" value="Instances(${numOfInstances})" name="viewInsts" title="View this definition's instances"> 
+					</td>
+				</tr>
+				#{/list}
+			</tbody>
+		</table>
+		#{/if}
+		#{else}
+			<p>No Process Defs Found</p>
+		#{/else}
+
+    </div>
+
+    <div id="crudListPagination">
+
+    </div>
+
+    <p id="uploadDefinition">
+      <form action="@{ProcessDefinitions.upload()}" method="POST" enctype="multipart/form-data">    
+        #{fileField label:'select definition file to upload', name:'uploadDefinitionFile' /} 
+         <input type="submit" value="upload it..." />        
+      </form>  
+    </p>
+</div>
+<div style="display: none;">
+	<div id="showcontent_win" style='padding:5px; background:#fff;'>
+		
+	</div>
+</div>
+<script type="text/javascript" charset="utf-8">
+$(document).ready(function(){	
+	//search
+	function searchDefs(){
+		var defName = $("input[name='defname']").val();
+		var searchAction = #{jsAction @search(':defName') /};
+		$("#listDefs").empty().load(searchAction({defName: defName}));
+	}
+	
+	$("input[name='defname']").keyup(function(){
+		searchDefs();
+	});	
+	$("input[name='search']").click(function(){
+		searchDefs();
+	});
+	
+	//create process instance
+	$("input[name='createInst']").live('click',function(){
+		var defId = $(this).parent().parent().attr("id");
+		var createAction = #{jsAction @createProcessInstance(':defId') /} ;
+	    window.location.href = createAction({defId: defId});
+	});
+	
+	//delete
+	$("input[name='delete']").live('click',function(){
+		var agree=confirm("This process definition and all the related instances will be permanently deleted and cannot be recovered. Are you sure to proceed?");
+		if(agree){
+			var defId = $(this).parent().parent().attr("id");
+			var deleteAction = #{jsAction @delete(':defId') /} ;
+			window.location.href = deleteAction({defId: defId});
+		}
+	});
+	
+	$("input.showcontent").colorbox({width:800,height:600,inline:true, href:"#showcontent_win",
+		onComplete:function(){
+			var defId = $(this).parent().parent().attr("id");
+			var action = #{jsAction @xml(':defId') /};
+			$("#showcontent_win").empty().load(action({defId: defId}));
+		}
+	});
+	
+	//view this difinition's instances
+	$("input[name='viewInsts']").live('click',function(){
+		var defId = $(this).parent().parent().attr("id");
+		var viewAction = #{jsAction @ProcessInstances.index(':defId') /} ;
+		window.location.href = viewAction({defId: defId});
+	});
+
+});
+</script>

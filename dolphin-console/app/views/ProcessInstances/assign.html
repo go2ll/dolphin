@@ -1,0 +1,47 @@
+
+<div id="assignDiv">
+	<table width="100%">
+		<tr>
+			<td width="250" align="right">assign <strong>${fromActName}</strong> task to user:</td>
+			<td><input type="text" name="userId" value=""/></td>
+		</tr>	
+		<tr></tr>
+		<tr>
+			<td colspan="2" align="center">
+			    <input type="button" name="assign_btn" value="Assign and continue run" onClick="assignAndRunProcess();"/>&nbsp;
+				<input type="button" name="cancel_btn" value="Cancel" />
+			</td>
+		</tr>		
+	</table>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+$(document).ready(function(){
+	
+	$("input[name='cancel_btn']").click(function(){
+		 $.colorbox.close();
+	});	
+
+});
+
+function assignAndRunProcess() {
+	var instid = "${instId}";
+	var actid = "${fromActId}";
+	var userid = $("input[name='userId']").val();	
+	if(userid!=""){		    
+	    $.ajax({
+			   type: "POST",
+			   url:   "@{ProcessInstances.assignAndRun()}",
+			   data: "instId="+instid+"&actId="+actid+"&userId="+userid,
+			   success: function(msg){
+				if(msg["exception"] == 'AssignmentException'){
+					showAssignmentDialog(instid , msg["fromActId"],msg["fromActName"]);
+				}  else {
+				     $.colorbox.close();
+				     refreshProcessInsTab();					    
+				     }
+			   }
+			});				    
+	}
+}
+</script>

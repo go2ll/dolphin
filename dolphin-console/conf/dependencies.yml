@@ -1,0 +1,16 @@
+# Application dependencies
+
+require:
+    - play
+    - play -> secure
+    - play -> crud
+    - play -> router head
+    - com.oracle -> ojdbc14_g 10.0
+
+repositories:
+
+- playVendorDependencies:
+    type:       local
+    artifact:   "${application.path}/lib/[organization]/[module]_[revision]"
+    contains:  
+      - com.oracle -> *

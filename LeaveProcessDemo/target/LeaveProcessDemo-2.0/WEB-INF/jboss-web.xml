@@ -1,0 +1,12 @@
+ <!DOCTYPE jboss-web PUBLIC
+    "-//JBoss//DTD Web Application 4.2//EN"
+    "http://www.jboss.org/j2ee/dtd/jboss-web_4_2.dtd">
+
+<jboss-web>
+     <context-root>/</context-root>
+     <resource-ref>
+        <res-ref-name>jdbc/myDB</res-ref-name>
+        <res-type>javax.sql.DataSource</res-type>
+        <jndi-name>java:tssidev</jndi-name>
+     </resource-ref>
+</jboss-web>

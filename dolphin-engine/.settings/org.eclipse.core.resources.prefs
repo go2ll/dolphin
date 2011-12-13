@@ -1,0 +1,7 @@
+#Fri Dec 02 15:16:09 CST 2011
+eclipse.preferences.version=1
+encoding//src/test/resources/sample/apply_leave_exclusive_choice.xml=UTF-8
+encoding//src/test/resources/sample/apply_leave_loop.xml=UTF-8
+encoding//src/test/resources/sample/apply_leave_parallel_AND.xml=UTF-8
+encoding//src/test/resources/sample/apply_leave_parallel_OR.xml=UTF-8
+encoding//src/test/resources/sample/apply_leave_selfloop.xml=UTF-8

@@ -1,0 +1,96 @@
+<style>
+<!--
+table#viewActs{
+	width: 100%;
+	border: 1px solid #ddd;
+	border-top: none;
+	border-collapse: collapse;
+	font-family: 'Helvetica','Arial','Sans';
+    font-size: 90%;
+}
+
+table#viewActs thead tr {
+	background: #104E8B;
+}
+
+table#viewActs th {
+	color: #fff;
+	font-weight: bold;
+}
+
+table#viewActs th a {
+	color: #fff;
+	font-weight: bold;
+}
+
+table#viewActs th {
+	text-align: left;
+	padding: 6px 5px;
+}
+
+table#viewActs td {
+	text-align: left;
+	padding: 4px 5px;
+}
+
+table#viewActs td {
+	border-bottom: 1px solid #EEEEEE;
+}
+
+table#viewActs tr.even {
+	background: #f9f9f9;
+}
+
+table#viewActs tr:last-child td {
+	border-bottom: 1px solid #ddd;
+}
+-->
+</style>
+#{if activityInsts}
+<table id="viewActs" class="deflist">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Name</th>
+			<th>Type</th>
+			<th>State</th>
+			<th>Join Type</th>
+			<th>Updated Time</th>            
+		</tr>
+	</thead>
+	<tbody>
+		#{list activityInsts, as:'act'}
+		<tr id="${act.id}">
+		    <td>${act.id}</td>
+			<td>${act.activityId}</td>
+			<td>${act.getType().toString()}</td>
+			<td>${act.state}</td>
+			<td>${act.joinType}</td>
+			<td>${act.updatedTime}</td>		                  
+		</tr>
+		#{/list}
+	</tbody>
+</table>
+#{/if}
+#{else}
+	<p>no activities found</p>
+#{/else}
+
+
+<script type="text/javascript" charset="utf-8">
+$(document).ready(function(){
+	//change css
+	$("#viewActs").find("tbody tr").mouseover(function(){
+		$(this).addClass("tr_backcolor");
+	});
+	$("#viewActs").find("tbody tr").mouseout(function(){
+		if($(this).attr("status") != "checked"){
+			$(this).removeClass("tr_backcolor");
+		}
+	});
+	var changeClass = function(name){
+		$(name).parent().find(" tbodytr").removeAttr("status").removeClass("tr_backcolor");
+		$(name).attr("status","checked").addClass("tr_backcolor");
+	}
+});
+</script>

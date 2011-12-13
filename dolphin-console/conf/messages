@@ -1,0 +1,22 @@
+# You can specialize this file for each language.
+# For example, for French create a messages.fr file
+#
+app.title=dolphin console
+definition.upload.error=No file upload!
+definition.upload.success=Process definition &{%s} has been uploaded.
+definition.upload.duplicate=Duplicate process definition, pls check!
+definition.createinstance.success=Created a new Process instance  &{%s}!
+definition.deletedefinition.success=Delete a definition successfully!
+
+#labels transfer
+id=ID
+fullname=Full Name
+email=Email
+role=Role
+userId=User ID
+state=State
+process=Process
+activity=Activity
+startedTime=Started Time  
+endTime=End Time
+operations=Operations

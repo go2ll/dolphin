@@ -1,0 +1,31 @@
+#{list items, as:'item'}
+%{processId = item.getProcessInstance().getProcessDefId();}%
+<tr id="${item.id}" class="${item_parity}">
+	<td>${item.id}</td>
+	<td>${processId}</td>
+	<td>${item.userId}</td>
+	<td>${item.state}</td>
+	<td>${item.startedTime}</td>
+	<td>
+		#{if item.state != com.yttimes.dolphin.kernel.WorkItemState.COMPLETED}
+		<input type="button" value="Reassign" name="assign" title="reassign user" class="reassign cboxElement"/>
+		#{/if}
+		#{else}
+		<input type="button" value="Reassign" name="assign" title="reassign user" disabled="disabled"/>
+		#{/else}
+	</td>
+</tr>
+#{/list}
+<script type="text/javascript" charset="utf-8">
+$(document).ready(function(){
+
+	$("input.reassign").colorbox({width:450,height:150,inline:true, href:"#workitem_win",
+		onComplete:function(){
+			var userId = $(this).parent().parent().find("td:eq(2)").text();
+			var itemId = $(this).parent().parent().attr("id");
+			$("input[name='userId']").val(userId);
+			$("input[name='itemId']").val(itemId);
+		}
+	});
+});
+</script>

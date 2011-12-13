@@ -1,0 +1,102 @@
+<style>
+<!--
+table#viewWorkitems{
+	width: 100%;
+	border: 1px solid #ddd;
+	border-top: none;
+	border-collapse: collapse;
+	font-family: 'Helvetica','Arial','Sans';
+    font-size: 90%;
+}
+
+table#viewWorkitems thead tr {
+	background: #104E8B;
+}
+
+table#viewWorkitems th {
+	color: #fff;
+	font-weight: bold;
+}
+
+table#viewWorkitems th a {
+	color: #fff;
+	font-weight: bold;
+}
+
+table#viewWorkitems th {
+	text-align: left;
+	padding: 6px 5px;
+}
+
+table#viewWorkitems td {
+	text-align: left;
+	padding: 4px 5px;
+}
+
+table#viewWorkitems td {
+	border-bottom: 1px solid #EEEEEE;
+}
+
+table#viewWorkitems tr.even {
+	background: #f9f9f9;
+}
+
+table#viewWorkitems tr:last-child td {
+	border-bottom: 1px solid #ddd;
+}
+-->
+</style>
+#{if workitems}
+<table id="viewWorkitems" class="deflist">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>User ID</th>
+			<th>Activity</th>
+			<th>State</th>
+			<th>Create Time</th>
+			<th>Operations</th>            
+		</tr>
+	</thead>
+	<tbody>
+		#{list workitems, as:'workitem'}
+		<tr id="${workitem.id}">
+		    <td>${workitem.id}</td>
+			<td>${workitem.userId}</td>
+			<td>%{out.print(workitem.getTaskInstance().getActivityInstance().getActivityId()); }% </td>			
+			<td>${workitem.state}</td>
+			<td>${workitem.startedTime}</td>
+			<td>#{if workitem.state != com.yttimes.dolphin.kernel.WorkItem.State.COMPLETED}
+			    <input type="button" value="Complete" name="complete" onClick="completeWorkitem(${workitem.id});" />
+			    #{/if}
+			    #{else}
+			    <input type="button" value="Complete" name="complete" disabled="disabled" />
+			    #{/else}
+			</td>		                  
+		</tr>
+		#{/list}
+	</tbody>
+</table>
+#{/if}
+#{else}
+	<p>no view workitem found</p>
+#{/else}
+
+
+<script type="text/javascript" charset="utf-8">
+$(document).ready(function(){
+	//change css
+	$("#viewWorkitems").find("tbody tr").mouseover(function(){
+		$(this).addClass("tr_backcolor");
+	});
+	$("#viewWorkitems").find("tbody tr").mouseout(function(){
+		if($(this).attr("status") != "checked"){
+			$(this).removeClass("tr_backcolor");
+		}
+	});
+	var changeClass = function(name){
+		$(name).parent().find(" tbodytr").removeAttr("status").removeClass("tr_backcolor");
+		$(name).attr("status","checked").addClass("tr_backcolor");
+	}
+});
+</script>

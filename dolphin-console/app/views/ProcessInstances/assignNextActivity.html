@@ -1,0 +1,36 @@
+<div id="addData">
+	#{if activities}
+    <p> Please assign next activity of this process:</p>
+	<table width="100%">
+		%{activityArray = activities.split(",");}%
+		#{list activityArray, as:'activity'}
+		<tr>
+			<input type="radio" name="nextActivity" value="${activity}" %{out.print(activity_index==1?'checked':'')}%> ${activity}<br>
+		</tr>
+		#{/list}
+		<tr>
+			<td colspan="2" align="center">
+				<input type="button" name="submit_btn" value="Set Next Activity And Run" />&nbsp;
+			</td>
+		</tr>		
+	</table>
+	#{/if}
+	#{else}
+		<p> No Next Activity Found</p>
+	#{/else}
+</div>
+
+<script type="text/javascript" charset="utf-8">
+$(document).ready(function(){
+	$("input[name='submit_btn']").click(function(){
+		#{if instId}
+		    var nextActivity = $('input[name=nextActivity]:checked').val()
+		   // alert(nextActivity);
+			var action = #{jsAction @runToNextActivity(':instId',':activityId') /} ;
+			$.post(action({instId: ${instId}, activityId: nextActivity}));
+			$.colorbox.close();
+			refreshProcessInsTab();
+		#{/if}	
+	});
+});
+</script>

@@ -1,0 +1,156 @@
+#{if inst}
+    %{defId=inst.getProcessDefinition().getId();}%
+    <table>
+    	<thead>
+		<tr>
+			<th colspan="5"><div align="center">Process Detail</div></th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr height="43">
+			<td width="85">Instance ID: </td>
+			<td width="150">${inst.id}</td>
+			<td width="85">Updated Time: </td>
+			<td width="150">${inst.updatedTime}</td>
+			<td>  #{ifnot inst.isHalted()}
+			      <input type="button" value="Run" name="run" onClick="runProcessInstance(${inst.id});"/>
+			      #{/ifnot}
+			      #{else}
+			         <input type="button" value="Run" name="run" disabled="disabled" />
+			      #{/else}
+			</td>
+		</tr>
+		<tr height="43">
+			<td>State:</td>
+			<td>${inst.state}</td>
+			<td>End Time:</td>
+			<td>${inst.endTime}</td>
+			<td> #{if inst.isUndoable()}
+                <input type="button" value="Undo" name="undo"  onClick="undoProcessInstance(${inst.id});"/>
+                #{/if}
+                #{else}
+			         <input type="button" value="Undo" name="undo" disabled="disabled" />
+			     #{/else}
+			</td>
+		</tr>
+		<tr height="43">
+			<td>Creator: </td>
+			<td>${inst.creatorId}</td>
+			<td>Expried Time: </td>
+			<td></td>
+			<td>
+				  #{ifnot inst.isHalted()}
+			      <input type="button" value="Cancel" name="cancel" onClick="cancelProcessInstance(${inst.id});"/>
+			      #{/ifnot}
+			      #{else}
+			       <input type="button" value="Cancel" name="cancel" disabled="disabled" />
+			      #{/else}
+			</td>
+		</tr>
+		<tr height="43">
+			<td>Create Time: </td>
+			<td>${inst.createdTime}</td>
+			<td>Priority: </td>
+			<td></td>
+			<td><input type="button" value="Delete" name="delete" onClick="deleteProcessInstance(${inst.id});"/></td>
+		</tr>
+		<tr>
+			<td colspan="5">
+				<div align="center">
+				   	<input type="button" value="Definition" name="definition" title="view definition" class="definition cboxElement"/>&nbsp;
+					<input type="button" value="Activities" name="activities" title="view activities" class="activities cboxElement"/>&nbsp;
+					<input type="button" value="WorkItems" name="workitems" title="view workitems" class="workitems cboxElement"/>&nbsp;
+					<input type="button" value="Variables" name="variables" title="update variables" class="variables cboxElement"/>
+				</div>
+			</td>
+		</tr>
+		</tbody>
+	</table>
+#{/if}
+#{else}
+	<p>No Process Instance Detail Found</p>
+#{/else}
+
+<div style="display: none;">
+    <div id="definition_win" style='padding:5px; background:#fff;'></div>
+	<div id="variables_win" style='padding:5px; background:#fff;'></div>
+	<div id="activities_win" style='padding:5px; background:#fff;'></div>
+	<div id="workitems_win" style='padding:5px; background:#fff;'></div>
+	<div id="assignment_win" style='padding:5px; background:#fff;'></div>
+	<div id="assign_variables_win" style='padding:5px; background:#fff;'></div>		
+	<div id="assign_nextActivity_win" style='padding:5px; background:#fff;'></div>
+</div>
+<script type="text/javascript" charset="utf-8">
+
+function completeWorkitem(workitemid) {
+	var instid = ${inst?.id};
+	$.ajax({
+		   type: "POST",
+		   url:   "@{WorkItems.complete()}",
+		   data: "itemId="+workitemid,
+		   success: function(msg) {
+			if(msg["exception"] == 'AssignmentException'){
+				showAssignmentDialog(instid , msg["fromActId"],msg["fromActName"]);
+			} else if(msg["exception"] == 'ExpressionException') {
+				showAssignVariablesDialog(instid, msg["keys"]);
+		     } else {
+		    	 if(msg["processState"] == 'TERMINATED') alert("Dude, process is terminated!");
+		    	 showWorkItems();
+		     }
+		   }
+		});	
+}
+
+
+function showWorkItems() {
+	var instid = ${inst?.id};
+	var viewAction = #{jsAction @workitems(':instid') /} ;
+	$('#workitems_win').load(viewAction({instid: instid}));
+}
+
+$(document).ready(function(){
+
+	$("input.variables").colorbox({width:400,height:350,inline:true, href:"#variables_win",
+		onComplete:function(){
+			#{if inst}
+			    var instid = ${inst.id};
+				var viewAction = #{jsAction @variables(':instid') /} ;
+				$('#variables_win').load(viewAction({instid: instid}));
+        	#{/if}
+		}
+	});
+	
+	
+	$("input.activities").colorbox({width:600,height:350,inline:true, href:"#activities_win",
+		onComplete:function(){
+			#{if inst}
+				var instid = ${inst.id};
+				var viewAction = #{jsAction @activities(':instid') /} ;
+	        	$('#activities_win').load(viewAction({instid: instid}));
+        	#{/if}
+		}
+	});
+	
+	$("input.workitems").colorbox({width:600,height:350,inline:true, href:"#workitems_win",
+		onComplete:function(){
+			#{if inst}
+				showWorkItems();
+        	#{/if}
+		},
+		onClosed:function(){
+			refreshProcessInsTab();
+		}
+	});
+	
+	$("input.definition").colorbox({width:800,height:600,inline:true, href:"#definition_win",
+		onComplete:function(){			
+			var defId = ${defId};
+			var action = #{jsAction @ProcessDefinitions.xml(':defId') /};
+			$("#definition_win").empty().load(action({defId: defId}));
+		}
+	});
+
+});
+
+
+</script>

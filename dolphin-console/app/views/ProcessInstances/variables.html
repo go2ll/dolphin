@@ -1,0 +1,160 @@
+<div id="viewData">	
+    <br><br>
+	<div id="var">
+		#{if dataVariables}
+		<table width="100%">
+			#{list items:dataVariables.keySet(), as:'key'}
+			<tr>
+				<td width="150" align="right">${key}:</td>
+				<td><input type="text" name="${key}" value="${dataVariables.get(key)}"/></td>
+			</tr>
+			#{/list}
+			<tr>
+				<td colspan="2" align="center">
+					<input type="button" name="update_btn" value="Submit" />&nbsp;&nbsp;
+					<input type="button" name="con_add_btn" value="Add" />&nbsp;&nbsp;
+					<input type="button" name="clear_btn" value="Clear All" />
+				</td>
+			</tr>		
+		</table>
+		#{/if}
+		#{else}
+			<p>No variables found, click <input type="button" name="add_btn" value="Add Variable"/> to add.</p>
+		#{/else}
+	</div>
+</div>
+
+<div id="addData">
+    <p> Add New Variable</p><br>
+	<table width="100%">
+		<tr>
+			<td width="150" align="right">Key:</td>
+			<td><input type="text" name="key" value=""/></td>
+		</tr>
+		<tr>
+			<td width="150" align="right">Value:</td>
+			<td><input type="text" name="value" value=""/></td>
+		</tr>		
+		<tr>
+			<td colspan="2" align="center">
+				<input type="button" name="add_submit_btn" value="Add" />&nbsp;
+				<input type="button" name="cancel_btn" value="Cancel" />
+			</td>
+		</tr>		
+	</table>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+$(document).ready(function(){
+	#{if mode}
+	   $("#viewData").hide();
+	   $("#addData").show();
+	 #{/if}
+	 #{else}
+	   $("#viewData").show();
+	   $("#addData").hide();
+	 #{/else}
+
+	$("input[name='update_btn']").click(function(){
+		#{if inst}	
+			var instid = "${inst.id}";
+			var keys = "";
+			var values = "";	
+			var flag = false;
+			
+			#{if dataVariables}
+				#{list items:dataVariables.keySet(), as:'key'}
+					keys += "${key},";
+					if($("input[name='${key}']").val() == ""){
+						alert($("input[name='${key}']").attr("name") + " is null");
+						$("input[name='${key}']").focus();
+						return false;
+					}else{
+						values += $("input[name='${key}']").val() + ",";
+						flag = true;
+					}
+				#{/list}
+			#{/if}
+			
+			if(flag){
+				var updateAction = #{jsAction @updatevariables(':instId',':keys',':values') /} ;
+			    $.post(updateAction({instId: instid, keys: keys, values: values}));
+			    $.colorbox.close();
+			    flag = false;
+			}
+        #{/if}
+	});
+	
+	$("input[name='add_btn']").click(function(){
+		$("#viewData").hide();
+		$("#addData").show();
+	});
+	
+	$("input[name='con_add_btn']").click(function(){
+		$("#viewData").hide();
+		$("#addData").show();
+	});
+	
+	$("input[name='cancel_btn']").click(function(){
+		$("#viewData").show();
+		$("#addData").hide();
+	});
+	
+	$("input[name='add_submit_btn']").click(function(){
+		#{if inst}
+			var instid = ${inst.id};
+			var key = $("input[name='key']").val();
+			var value = $("input[name='value']").val();
+			
+			if(key == ""){
+				//alert("key is null");
+				$("input[name='key']").focus();
+			}else if(value == ""){
+				alert("value is null");
+				$("input[name='value']").focus();
+			}else{
+				var addAction = #{jsAction @addvariable(':instId',':key',':value') /} ;
+				$('#variables_win').load(addAction({instId: instid, key: key, value: value}));
+			}
+			return false;
+		#{/if}	
+	});
+	
+	
+	$("input[name='add_run_btn']").click(function(){
+		#{if inst}
+			var instid = ${inst.id};
+			var key = $("input[name='key']").val();
+			var value = $("input[name='value']").val();
+			
+			if(key == ""){
+				//alert("key is null");
+				$("input[name='key']").focus();
+			}else if(value == ""){
+				alert("value is null");
+				$("input[name='value']").focus();
+			}else{
+				var addAction = #{jsAction @addvariable(':instId',':key',':value') /} ;
+				$('#variables_win').load(addAction({instId: instid, key: key, value: value}));
+			}
+			return false;
+		#{/if}	
+	});
+	
+	
+	$("input[name='clear_btn']").click(function(){
+		#{if inst}
+			var instid = ${inst.id};
+			clearVariable(instid);			
+		#{/if}
+	});
+	
+	function clearVariable(instid){
+		if(confirm("Are you sure to clear all the data?")){
+			var clearAction = #{jsAction @clearvariables(':instId') /} ;
+			$.post(clearAction({instId: instid}));
+			$("#var").empty().html("<p>Not update variables Found!</p>");
+		}
+	}
+});
+</script>

@@ -1,0 +1,31 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+
+
+# Ignore favicon requests
+GET     /favicon.ico                            404
+
+# Map static resources from the /app/public folder to the /public path
+GET     /public/                                staticDir:public
+
+
+
+# Home page
+GET     /?                                      Console.index
+
+POST   /processdefinition/upload                ProcessDefinitions.uploadDefinition
+
+GET    /processdefinitions                      ProcessDefinitions.list
+
+GET    /processinstances                        ProcessInstances.index
+
+
+# Import secure routes
+*       /                                       module:secure
+
+# Catch all
+*       /{controller}/{action}                  {controller}.{action}
+
+*       /                                       module:crud

@@ -1,0 +1,20 @@
+/ActivityInstance.java/1.2.2.14/Tue Dec  6 07:01:00 2011//Tdolphin-110725-v2
+/ActivityInstanceFactory.java/1.2.2.2/Mon Sep 26 07:10:16 2011//Tdolphin-110725-v2
+/ApplicationHandler.java/1.2/Mon Jul 25 06:53:29 2011//Tdolphin-110725-v2
+/ApplicationTaskInstance.java/1.2.2.4/Mon Sep 26 07:10:16 2011//Tdolphin-110725-v2
+/AssignmentHandler.java/1.2.2.1/Tue Sep 20 01:49:47 2011//Tdolphin-110725-v2
+/AutomaticActivity.java/1.2.2.7/Mon Sep 26 07:10:16 2011//Tdolphin-110725-v2
+/EndActivity.java/1.2.2.4/Mon Sep 26 07:10:16 2011//Tdolphin-110725-v2
+/ExpressionParser.java/1.2.2.3/Mon Sep 26 02:41:54 2011//Tdolphin-110725-v2
+/FormTaskInstance.java/1.2.2.11/Mon Dec  5 03:12:26 2011//Tdolphin-110725-v2
+/ManualActivity.java/1.2.2.17/Tue Dec  6 07:01:00 2011//Tdolphin-110725-v2
+/PatternAssignmentHandler.java/1.1.2.1/Mon Dec  5 03:01:19 2011//Tdolphin-110725-v2
+/ProcessInstance.java/1.2.2.24/Tue Dec  6 05:45:32 2011//Tdolphin-110725-v2
+/RouteActivity.java/1.2.2.5/Mon Sep 26 07:10:16 2011//Tdolphin-110725-v2
+/StartActivity.java/1.2.2.5/Mon Sep 26 07:10:16 2011//Tdolphin-110725-v2
+/TaskActivityInstance.java/1.2.2.4/Tue Dec  6 07:01:00 2011//Tdolphin-110725-v2
+/TaskInstance.java/1.2.2.6/Sun Oct  9 02:15:54 2011//Tdolphin-110725-v2
+/WorkItem.java/1.2.2.16/Tue Dec  6 07:01:00 2011//Tdolphin-110725-v2
+D/activity////
+D/repository////
+D/task////
