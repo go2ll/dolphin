@@ -1,0 +1,12 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.yttimes.dolphin</groupId>
+  <artifactId>dolphin-workflow</artifactId>
+  <version>2.0</version>
+  <packaging>pom</packaging>
+  
+  <modules>
+    <module>dolphin-engine</module>
+    <module>LeaveProcessDemo</module>
+  </modules>
+</project>
