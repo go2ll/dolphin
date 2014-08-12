@@ -1,0 +1,34 @@
+allprojects {
+    apply plugin: 'idea'
+    group = 'com.yttimes.dolphin'
+    version = '1.0'
+}
+
+subprojects {
+    apply plugin: 'java'
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        testCompile 'junit:junit:4.11'
+        compile 'log4j:log4j:1.2.16'
+        compile 'org.slf4j:slf4j-log4j12:1.6.1'
+        compile 'mysql:mysql-connector-java:5.1.17'
+        compile 'org.hibernate:hibernate-entitymanager:3.6.6.Final'
+        compile 'org.codehaus.btm:btm:2.1.1'
+        compile 'cglib:cglib:2.2.2'
+    }
+}
+
+//project(':engine') {
+//    dependencies {
+//    }
+//}
+
+project(':demo') {
+    apply plugin: 'jetty'
+    dependencies {
+        compile project(':engine')
+        compile 'javax.servlet:servlet-api:2.5'
+    }
+}
