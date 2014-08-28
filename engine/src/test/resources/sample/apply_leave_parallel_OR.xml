@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Process Id="leave_parallel_or" Name="请假流程" Version="1.0">
+    <Activities>
+        <Activity Id="startNode" Name="开始" Type="START"/>
+        <Activity Id="act_1" Name="填写请假申请表" Type="MANUAL">
+            <Tasks>
+                <FormTask Id="applyFormTask" Type="FORM" Name="请假申请表">
+                    <Assignment>com.yttimes.dolphin.kernel.QueryCurrentUserHandler</Assignment>
+                    <Form></Form>
+                </FormTask>
+            </Tasks>
+        </Activity>
+        <Activity Id="act_2" Name="部门经理审批" Type="MANUAL" Split="TRUE">
+            <Tasks>
+                <FormTask Id="approveFormTask" Type="FORM" Name="审批">
+                    <Assignment>com.yttimes.dolphin.kernel.GeneralManagerUserHandler</Assignment>
+                    <Form></Form>
+                </FormTask>
+            </Tasks>
+        </Activity>
+        <Activity Id="act_3" Name="打印请假单" Type="MANUAL">
+            <Tasks>
+                <FormTask Id="printFormTask" Type="FORM" Name="打印请假单">
+                    <Assignment>com.yttimes.dolphin.kernel.GeneralManagerUserHandler</Assignment>
+                    <Form></Form>
+                </FormTask>
+            </Tasks>
+        </Activity>
+        <Activity Id="act_4" Name="存档" Type="MANUAL">
+            <Tasks>
+                <FormTask Id="documentTask" Type="FORM" Name="存档">
+                    <Assignment>com.yttimes.dolphin.kernel.DeptManagerUserHandler</Assignment>
+                    <Form></Form>
+                </FormTask>
+            </Tasks>
+        </Activity>
+        <Activity Id="endNode" Name="结束" Type="END" JoinType="OR"/>
+    </Activities>
+
+    <Transitions>
+        <Transition From="startNode" To="act_1">
+            <Condition/>
+        </Transition>
+        <Transition From="act_1" To="act_2">
+            <Condition/>
+        </Transition>
+        <Transition From="act_2" To="act_3">
+            <Condition/>
+        </Transition>
+        <Transition From="act_2" To="act_4">
+            <Condition/>
+        </Transition>
+        <Transition From="act_3" To="endNode">
+            <Condition></Condition>
+        </Transition>
+        <Transition From="act_4" To="endNode">
+            <Condition></Condition>
+        </Transition>
+    </Transitions>
+</Process>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Process Id="leave_exclusive" Name="请假流程" Version="1.0">
+    <Activities>
+        <Activity Id="startNode" Name="开始" Type="START"/>
+        <Activity Id="act_1" Name="填写请假申请表" Type="MANUAL">
+            <Tasks>
+                <FormTask Id="applyFormTask">
+                    <Assignment>com.yttimes.dolphin.kernel.QueryCurrentUserHandler</Assignment>
+                    <Form></Form>
+                </FormTask>
+            </Tasks>
+        </Activity>
+        <Activity Id="act_2" Name="部门经理审批" Type="MANUAL">
+            <Tasks>
+                <FormTask Id="deptApprove">
+                    <Assignment>com.yttimes.dolphin.kernel.DeptManagerUserHandler</Assignment>
+                    <Form></Form>
+                </FormTask>
+            </Tasks>
+        </Activity>
+        <Activity Id="act_3" Name="允许请假" Type="ROUTE">
+            <Tasks/>
+        </Activity>
+        <Activity Id="act_4" Name="驳回请假" Type="ROUTE">
+            <Tasks/>
+        </Activity>
+        <Activity Id="successEndNode" Name="允许结束" Type="END"/>
+        <Activity Id="failedEndNode" Name="驳回结束" Type="END"/>
+    </Activities>
+
+    <Transitions>
+        <Transition From="startNode" To="act_1">
+            <Condition/>
+        </Transition>
+        <Transition From="act_1" To="act_2">
+            <Condition/>
+        </Transition>
+        <Transition From="act_2" To="act_3">
+            <Condition><![CDATA[ $approveFlag == 'true' ]]></Condition>
+        </Transition>
+        <Transition From="act_2" To="act_4">
+            <Condition><![CDATA[ $approveFlag == 'false' ]]></Condition>
+        </Transition>
+        <Transition From="act_3" To="successEndNode">
+            <Condition></Condition>
+        </Transition>
+        <Transition From="act_4" To="failedEndNode">
+            <Condition></Condition>
+        </Transition>
+    </Transitions>
+</Process>

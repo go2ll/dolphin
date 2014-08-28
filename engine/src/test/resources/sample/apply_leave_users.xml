@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Process Id="leave_user" Name="请假流程" Version="1.0">
+    <Activities>
+        <Activity Id="startNode" Name="开始" Type="START"/>
+        <Activity Id="act_1" Name="请假申请表" Type="MANUAL">
+            <Tasks>
+                <FormTask Id="applyFormTask" Type="FORM" Name="fill the application form">
+                    <Assignment>10310000000001</Assignment>
+                    <Form>/apply.jsp</Form>
+                </FormTask>
+            </Tasks>
+        </Activity>
+        <Activity Id="act_2" Name="部门经理审批" Type="MANUAL">
+            <Tasks>
+                <FormTask Id="deptApprove" Type="FORM" Name="approve leave(dept manager)"
+                          Strategy="ALL">
+                    <Assignment>1001,1002</Assignment>
+                    <Form>/approve.jsp</Form>
+                </FormTask>
+            </Tasks>
+        </Activity>
+        <Activity Id="act_3" Name="总经理审批" Type="MANUAL">
+            <Tasks>
+                <FormTask Id="generalApprove" Type="FORM" Name="approve leave(general manager)">
+                    <Assignment>ALL</Assignment>
+                    <Form>/approve.jsp</Form>
+                </FormTask>
+            </Tasks>
+        </Activity>
+        <Activity Id="act_4" Name="归档" Type="AUTOMATIC">
+            <Tasks>
+                <AppTask Id="sendLeaveNotifyEmails" Name="打印信息">
+                    <Application>com.yttimes.dolphin.kernel.PrintLeaveInfoAppHandler</Application>
+                </AppTask>
+            </Tasks>
+        </Activity>
+        <Activity Id="failedEndNode" Name="失败结束" Type="END"/>
+        <Activity Id="successedEndNode" Name="成功结束" Type="END"/>
+    </Activities>
+
+    <Transitions>
+        <Transition From="startNode" To="act_1">
+            <Condition/>
+        </Transition>
+        <Transition From="act_1" To="act_2">
+            <Condition/>
+        </Transition>
+        <Transition From="act_2" To="act_3">
+            <Condition><![CDATA[ $leaveDayNum >='3' && $approveFlag == 'true']]></Condition>
+        </Transition>
+        <Transition From="act_2" To="act_4">
+            <Condition><![CDATA[ $leaveDayNum < '3' && $approveFlag == 'true']]></Condition>
+        </Transition>
+        <Transition From="act_2" To="failedEndNode">
+            <Condition><![CDATA[ $approveFlag == 'false' ]]></Condition>
+        </Transition>
+        <Transition From="act_3" To="act_4">
+            <Condition><![CDATA[ $approveFlag == 'true' ]]></Condition>
+        </Transition>
+        <Transition From="act_3" To="act_1">
+            <Condition><![CDATA[ $approveFlag == 'false' ]]></Condition>
+        </Transition>
+        <Transition From="act_4" To="successedEndNode">
+            <Condition/>
+        </Transition>
+    </Transitions>
+</Process>

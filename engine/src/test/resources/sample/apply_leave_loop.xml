@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Process Id="leave_loop" Name="请假流程" Version="1.0">
+    <Activities>
+        <Activity Id="startNode" Name="开始" Type="START"/>
+        <Activity Id="act_1" Name="填写请假申请表" Type="MANUAL">
+            <Tasks>
+                <FormTask Id="applyFormTask" Type="FORM" Name="请假申请表">
+                    <Assignment>com.yttimes.dolphin.kernel.QueryCurrentUserHandler</Assignment>
+                    <Form></Form>
+                </FormTask>
+            </Tasks>
+        </Activity>
+        <Activity Id="act_2" Name="部门经理审批" Type="MANUAL">
+            <Tasks>
+                <FormTask Id="approvalFormTask" Type="FORM" Name="部门经理审批">
+                    <Assignment>com.yttimes.dolphin.kernel.GeneralManagerUserHandler</Assignment>
+                    <Form></Form>
+                </FormTask>
+            </Tasks>
+        </Activity>
+        <Activity Id="act_3" Name="打印请假单" Type="AUTOMATIC">
+            <Tasks>
+                <AppTask Id="sendEmailTask" Name="打印请假单">
+                    <Application>com.yttimes.dolphin.kernel.DeptManagerUserHandler</Application>
+                </AppTask>
+            </Tasks>
+        </Activity>
+        <Activity Id="endNode" Name="结束" Type="END"/>
+    </Activities>
+
+    <Transitions>
+        <Transition From="startNode" To="act_1">
+            <Condition/>
+        </Transition>
+        <Transition From="act_1" To="act_2">
+            <Condition/>
+        </Transition>
+        <Transition From="act_2" To="act_3">
+            <Condition><![CDATA[ $approveFlag == 'true' ]]></Condition>
+        </Transition>
+        <Transition From="act_2" To="act_1">
+            <Condition><![CDATA[ $approveFlag == 'false' ]]></Condition>
+        </Transition>
+        <Transition From="act_3" To="endNode">
+            <Condition/>
+        </Transition>
+    </Transitions>
+</Process>
