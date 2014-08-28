@@ -1,8 +1,13 @@
 package com.yttimes.dolphin.support.annotation;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.naming.NamingException;
 
 public class JndiIntegration {
+
+  private static Logger logger = LoggerFactory.getLogger(JndiIntegration.class);
 
   private JndiIntegration() {
   }
@@ -23,7 +28,7 @@ public class JndiIntegration {
 
     public T get() {
       try {
-        System.out.println("look up jndi name:" + name);
+        logger.info("look up jndi name : " + name);
         return type.cast(ContextFactory.getInstance().getContext().lookup(name));
       } catch (NamingException e) {
         throw new RuntimeException(e);

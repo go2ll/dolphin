@@ -91,7 +91,6 @@ public class JPAService {
 
   public void createJPAContext() {
     this.emFactory = Persistence.createEntityManagerFactory("dolphin");
-
   }
 
   public void createJPAContext(EntityManagerFactory emf) {

@@ -7,7 +7,6 @@
 
     <!-- A JPA Persistence Unit -->
     <persistence-unit name="dolphin" transaction-type="JTA">
-        <provider>org.hibernate.ejb.HibernatePersistenceProvider</provider>
         <jta-data-source>java:comp/env/jdbc/myDB</jta-data-source>
         <class>com.yttimes.dolphin.definition.ProcessDefinition</class>
         <class>com.yttimes.dolphin.kernel.ActivityInstance</class>
