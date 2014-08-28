@@ -234,13 +234,10 @@ public class ProcessDefinition {
     parser.rebuild(this);
   }
 
-  @SuppressWarnings({"unchecked", "rawtypes"})
   public List<ProcessInstance> getProcessInstances() {
-    Collections.sort(processInstances, new Comparator() {
-      public int compare(Object o1, Object o2) {
-        ProcessInstance ins1 = (ProcessInstance) o1;
-        ProcessInstance ins2 = (ProcessInstance) o2;
-        return ins2.getUpdatedTime().compareTo(ins1.getUpdatedTime());
+    Collections.sort(processInstances, new Comparator<ProcessInstance>() {
+      public int compare(ProcessInstance o1, ProcessInstance o2) {
+        return o2.getUpdatedTime().compareTo(o1.getUpdatedTime());
       }
     });
     return processInstances;

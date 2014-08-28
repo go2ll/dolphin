@@ -20,9 +20,9 @@
             <property name="hibernate.transaction.manager_lookup_class"
                       value="org.hibernate.transaction.BTMTransactionManagerLookup"/>
 
-            <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
             <property name="hiberante.cache_provider" value="org.hibernate.cache.NoCacheProvider"/>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.hbm2ddl.auto" value="create"/>
         </properties>
     </persistence-unit>
 

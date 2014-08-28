@@ -42,8 +42,6 @@ public class BTMServletContextListener implements ServletContextListener {
 
   @Override
   public void contextInitialized(ServletContextEvent sce) {
-    System.setProperty("bitronix-resource-path",
-                       Thread.currentThread().getContextClassLoader().getResource("").getPath());
     btm = TransactionManagerServices.getTransactionManager();
     JPAService.getInstance().createJPAContext();
   }

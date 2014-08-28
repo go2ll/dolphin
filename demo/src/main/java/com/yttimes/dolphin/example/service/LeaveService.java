@@ -153,7 +153,6 @@ public class LeaveService {
   }
 
 
-  /* for oracle db */
   @JTATransactional
   public void applyLeave(final long workItemId, final long applierId, final long dayNum,
                          final String reason) throws Exception {
@@ -166,22 +165,15 @@ public class LeaveService {
     PreparedStatement pst = null;
     try {
       conn = ds.getConnection();
-      Statement stmt = conn.createStatement();
-      ResultSet rs = stmt.executeQuery("select HIBERNATE_SEQUENCE.NEXTVAL from dual");
-      rs.next();
-      int nextvalue = rs.getInt(1);
-
       pst =
           conn.prepareStatement(
-              "insert into DOLPHIN_EXAMPLE_LEAVE(ID,APPLIER,LEAVE_DAY,REASON,PROCESS_INS_ID,APPLY_DATE) values(?,?,?,?,?,?)");
-      pst.setLong(1, nextvalue);
-      pst.setLong(2, applierId);
-      pst.setLong(3, dayNum);
-      pst.setString(4, reason);
-      pst.setLong(5, wi.getProcessInstance().getId());
-      pst.setDate(6, new Date(new java.util.Date().getTime()));
+              "insert into DOLPHIN_EXAMPLE_LEAVE(APPLIER,LEAVE_DAY,REASON,PROCESS_INS_ID,APPLY_DATE) values(?,?,?,?,?)");
+      pst.setLong(1, applierId);
+      pst.setLong(2, dayNum);
+      pst.setString(3, reason);
+      pst.setLong(4, wi.getProcessInstance().getId());
+      pst.setDate(5, new java.sql.Date(new java.util.Date().getTime()));
       pst.execute();
-
     } catch (Exception ex) {
       throw ex;
     } finally {
@@ -193,39 +185,6 @@ public class LeaveService {
       }
     }
   }
-
-	
-	/* for mysql db
-
-	@JTATransactional
-	public void applyLeave(final long workItemId, final long applierId, final long dayNum, final String reason) throws Exception {
-		WorkItem wi = manager.getWorkItemById(workItemId);
-		wi.getProcessInstance().setDataVariable("leaveDayNum", String.valueOf(dayNum));
-		wi.complete();
-
-		DataSource ds = JndiIntegration.fromJndi(DataSource.class, DS_JNDI);
-		Connection conn = null;
-		PreparedStatement pst = null;
-		try {
-			conn = ds.getConnection();			
-			pst = conn.prepareStatement("insert into DOLPHIN_EXAMPLE_LEAVE(APPLIER,LEAVE_DAY,REASON,PROCESS_INS_ID,APPLY_DATE) values(?,?,?,?,?)");
-			pst.setLong(1, applierId);
-			pst.setLong(2, dayNum);
-			pst.setString(3, reason);
-			pst.setLong(4, wi.getProcessInstance().getId());
-			pst.setDate(5, new java.sql.Date(new java.util.Date().getTime()));
-			pst.execute();
-		} catch (Exception ex) {
-			throw ex;
-		} finally {
-			if (pst != null)
-				pst.close();
-			if (conn != null)
-				conn.close();
-		}
-	}
-	
-		*/
 
 
   @JTATransactional

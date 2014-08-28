@@ -158,7 +158,7 @@ public abstract class ActivityInstance implements Comparable<ActivityInstance> {
     if (getState() == State.UNACTIVATED) {
       this.processInst.activateActivity(this);
     } else {
-      throw new DolphinException("Activity " + getActivityId() + " not initailized!");
+      throw new DolphinException("Activity " + getActivityId() + " not initialized!");
     }
   }
 
