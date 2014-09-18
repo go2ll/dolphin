@@ -1,0 +1,38 @@
+<Configure class="org.eclipse.jetty.webapp.WebAppContext">
+    <Call name="getConfiguration" class="bitronix.tm.TransactionManagerServices">
+        <Set name="serverId">jetty-btm-node0</Set>
+        <Set name="logPart1Filename">./work/btm1.tlog</Set>
+        <Set name="logPart2Filename">./work/btm2.tlog</Set>
+    </Call>
+
+    <!--<Call name="addLifeCycle">-->
+    <!--<Arg>-->
+    <!--<New class="bitronix.tm.integration.jetty7.BTMLifeCycle"/>-->
+    <!--</Arg>-->
+    <!--</Call>-->
+
+    <New class="org.eclipse.jetty.plus.jndi.Transaction">
+        <Arg>
+            <Call name="getTransactionManager" class="bitronix.tm.TransactionManagerServices"/>
+        </Arg>
+    </New>
+    <New id="mydatasource" class="org.eclipse.jetty.plus.jndi.Resource">
+        <Arg>jdbc/myDB</Arg>
+        <Arg>
+            <New class="bitronix.tm.resource.jdbc.PoolingDataSource">
+                <Set name="className">com.mysql.jdbc.jdbc2.optional.MysqlXADataSource
+                </Set>
+                <Set name="uniqueName">myDB</Set>
+                <Set name="minPoolSize">0</Set>
+                <Set name="maxPoolSize">5</Set>
+                <Set name="allowLocalTransactions">true</Set>
+                <Get name="driverProperties">
+                    <Put name="Url">jdbc:mysql://localhost:3306/dolphin</Put>
+                    <Put name="User">root</Put>
+                    <Put name="Password">abc123</Put>
+                </Get>
+                <Call name="init"/>
+            </New>
+        </Arg>
+    </New>
+</Configure>

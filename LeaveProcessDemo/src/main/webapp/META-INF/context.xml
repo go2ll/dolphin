@@ -1,9 +1,0 @@
-<Context path="/leaveprocessdemo" reloadable="true">
-
-	<Resource name="jdbc/myDB" auth="Container" type="javax.sql.XADataSource"
-		factory="bitronix.tm.resource.ResourceObjectFactory" uniqueName="jdbc/myDB" />
-
-	<Transaction factory="bitronix.tm.BitronixUserTransactionObjectFactory" />
-
-
-</Context>

@@ -1,0 +1,27 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'org.akhikhl.gretty:gretty:+'
+    }
+}
+
+repositories {
+    jcenter()
+}
+
+apply plugin: 'org.akhikhl.gretty'
+
+gretty {
+    servletContainer = 'jetty7'
+    contextPath = '/'
+}
+
+dependencies {
+    compile project(':engine')
+    compile 'javax.servlet:servlet-api:2.5'
+    compile 'org.codehaus.btm:btm-jetty7-lifecycle:2.1.4'
+    compile 'org.codehaus.btm:btm:2.1.4'
+}
